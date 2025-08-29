@@ -1,0 +1,12 @@
+{
+  "name": "albato-clicker",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node clicker.js"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}
