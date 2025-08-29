@@ -1,47 +1,35 @@
 name: albato-clicker
-
 on:
   schedule:
-    - cron: '0 * * * *'     # запуск раз в час (UTC)
-  workflow_dispatch: {}      # ручной запуск из вкладки Actions
-
-# чтобы запуски не накладывались
+    - cron: '0 * * * *'     # раз в час (UTC)
+  workflow_dispatch: {}
 concurrency:
   group: albato-clicker
   cancel-in-progress: true
-
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 75      # с запасом на 6 итераций по 10 минут
-
+    timeout-minutes: 75
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
       - name: Install deps
-        run: npm ci || npm i
-
-      # ставит браузеры и системные зависимости Playwright
+        run: npm i
       - name: Setup Playwright
         uses: microsoft/playwright-github-action@v1
         with:
           version: 1.47.0
-
       - name: Run clicker (6 итераций по 10 минут)
         env:
           ALBATO_LOGIN: ${{ secrets.ALBATO_LOGIN }}
           ALBATO_PASSWORD: ${{ secrets.ALBATO_PASSWORD }}
-          LOOPS: "6"          # сколько повторов в одном запуске
-          SLEEP_MIN: "10"     # пауза между стартами итераций, минут
+          LOOPS: "6"          # шесть раз
+          SLEEP_MIN: "10"     # пауза 10 минут
         run: node clicker.js
-
       - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
