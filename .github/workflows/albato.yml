@@ -1,0 +1,37 @@
+name: albato-clicker
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # каждые 5 минут (UTC)
+  workflow_dispatch: {}      # ручной запуск
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: |
+          npm ci || npm i
+          npx playwright install --with-deps
+
+      - name: Run clicker
+        env:
+          ALBATO_LOGIN: ${{ secrets.ALBATO_LOGIN }}
+          ALBATO_PASSWORD: ${{ secrets.ALBATO_PASSWORD }}
+        run: node clicker.js
+
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-artifacts
+          path: artifacts/
