@@ -2,17 +2,17 @@ name: albato-clicker
 
 on:
   schedule:
-    - cron: '0 * * * *'     # запуск раз в час (UTC)
-  workflow_dispatch: {}      # ручной запуск
+    - cron: '*/5 * * * *'     # запуск раз в 5 минут (UTC)
+  workflow_dispatch: {}
 
 concurrency:
   group: albato-clicker
-  cancel-in-progress: true
+  cancel-in-progress: false    # чтобы новый запуск ЖДАЛ, а не убивал старый
 
 jobs:
   run:
     runs-on: ubuntu-22.04
-    timeout-minutes: 75
+    timeout-minutes: 10        # максимум 10 минут на один запуск
 
     steps:
       - name: Checkout
@@ -26,16 +26,15 @@ jobs:
       - name: Install deps
         run: npm i
 
-      # Критично: скачать браузер Chromium и системные зависимости
-      - name: Install Playwright browsers (chromium)
+      - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run clicker (6 итераций по 10 минут)
+      - name: Run clicker (1 итерация)
         env:
           ALBATO_LOGIN: ${{ secrets.ALBATO_LOGIN }}
           ALBATO_PASSWORD: ${{ secrets.ALBATO_PASSWORD }}
-          LOOPS: "6"
-          SLEEP_MIN: "10"
+          LOOPS: "1"           # ← только ОДНО выполнение!
+          SLEEP_MIN: "0"
         run: node clicker.js
 
       - name: Upload artifacts on failure
