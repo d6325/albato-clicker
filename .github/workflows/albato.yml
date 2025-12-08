@@ -1,8 +1,6 @@
 name: albato-clicker
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'     # запуск раз в 5 минут (UTC)
   workflow_dispatch: {}
 
 concurrency:
