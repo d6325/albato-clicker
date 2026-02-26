@@ -21,14 +21,16 @@ const LOGIN_URL  = 'https://new.albato.ru/login';
 const TARGET_URL = 'https://new.albato.ru/settings/vkads/71/campaigns';
 
 // --- Кандидаты локаторов кнопки (от более надёжных к твоему длинному) ---
+// --- Кандидаты локаторов кнопки (от более надёжных к твоему длинному) ---
 const BUTTON_SELECTORS = [
   'button.al-credential-profile__update-button',
+  'button.al-button.al-credential-profile__update-button',
+  'button.al-button_color_defaultNew.al-credential-profile__update-button',
   'button:has-text("Обновить")',
   'button:has-text("Update")',
-  // запасной: твой длинный селектор
-  #layout > div.al-layout__inner > div.al-layout__container.al-layout__container_credentials > div > div > div.al-grid-row.al-grid-row_align_top.al-grid-row_auto-flow_row.al-grid-row_justify_center.al-credentials__container > div.al-credential-profile > div > div.al-flex-box.al-flex-box_align_center.al-flex-box_direction_row.al-flex-box_display_flex.al-flex-box_height_default.al-flex-box_justify_space-between.al-flex-box_width_default.al-flex-box_wrap_nowrap.my-\[32px\].gap-x-4.lg\:gap-x-0 > div.al-flex-box.al-flex-box_align_normal.al-flex-box_direction_row.al-flex-box_display_flex.al-flex-box_height_default.al-flex-box_justify_flex-start.al-flex-box_width_default.al-flex-box_wrap_nowrap > button.al-button.al-button_color_defaultNew.al-button_size_xs.al-button_variant_contained.al-button_weight_600.al-button_width_default.al-credential-profile__update-button.btn.btn-xs.mr-\[8px\] > div
-  ];
-
+  // запасной вариант — укороченный, без экранирований и без > div в конце
+  'button.al-button.al-button_color_defaultNew.al-button_size_xs.al-button_variant_contained.al-button_weight_600.al-button_width_default.al-credential-profile__update-button.btn.btn-xs.mr-[8px]',
+];
 // ---- Вспомогалка для сна
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
